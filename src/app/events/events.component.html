@@ -1,0 +1,29 @@
+<div class="grid grid--fluid">
+  <div class="grid__inner">
+    <div class="grid__cell grid__cell--lg-3" *ngFor="let event of events">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ event.name_en | titlecase }}
+          </h5>
+          <h6 class="card-subtile text-muted">
+            <svg class="icon icon--calendar icon--m">
+              <use xlink:href="/assets/icon/symbol-defs.svg#icon-calendar"></use>
+            </svg>
+            {{ event.start_date | date: 'MMMM d, yyyy' }}
+          </h6>
+          <h6 class="card-subtile text-muted">
+            <svg class="icon icon--calendar icon--m">
+              <use xlink:href="/assets/icon/symbol-defs.svg#icon-calendar"></use>
+            </svg>
+            {{ event.end_date | date: 'MMMM d, yyyy' }}
+          </h6>
+          <p class="card-text">
+            {{ event.description_en | words: 30 }}
+          </p>
+          <a (click)="eventViewDetail(event)" class="card-link">View details</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

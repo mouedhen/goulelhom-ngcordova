@@ -1,0 +1,51 @@
+$edisa-accordion-group-group: (
+  #c62828,
+  #d32f2f,
+  #e53935,
+  #f44336,
+  #ef5350,
+  #e57373,
+);
+
+.edisa-accordion-group {
+  @for $i from 1 through length($edisa-accordion-group-group) {
+    &:nth-of-type(#{$i}) {
+      background-color: nth($edisa-accordion-group-group, $i);
+    }
+  }
+}
+
+.edisa-accordion-group-group {
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  @include p-unit-rem("padding-right", $font-size-base);
+  @include p-unit-rem("padding-left", $font-size-base);
+
+  & .panel-heading,
+  & .card-header {
+    color: rgba(#fff, 0.9);
+    @include p-unit-rem("font-size", ts(1, $ratio: 1.333));
+    @include p-unit-rem("line-height", ($font-size-base * $line-height-base) * 2);
+    padding: 0;
+    background-color: transparent;
+    border-bottom: 0;
+    transition: color 0.15s;
+    font-weight: 500;
+
+    &:first-child {
+      border-radius: 0;
+    }
+
+    &:hover {
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  & .panel-body,
+  & .card-block,
+  & .card-body {
+    padding: 0;
+  }
+}

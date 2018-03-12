@@ -1,0 +1,21 @@
+.icon {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+.icon--m {
+  @include p-unit-rem("margin-right", 0.5em);
+  margin-left: 0;
+
+  @at-root .icon--m-l,
+  [dir="rtl"] & {
+    margin-right: 0;
+    @include p-unit-rem("margin-left", 0.5em);
+  }
+}

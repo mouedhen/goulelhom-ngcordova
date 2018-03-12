@@ -1,0 +1,20 @@
+$type-scale-base: 16px;
+
+$type-scale-ratio: 1.5;
+
+@function ts($i: 0, $base: $type-scale-base, $ratio: $type-scale-ratio) {
+  $i: round($i);
+
+  @if $i > 0 {
+    @for $j from 1 through $i {
+      $base: $base * $ratio;
+    }
+  }
+  @else if $i < 0 {
+    @for $k from 1 through abs($i) {
+      $base: $base / $ratio;
+    }
+  }
+
+  @return round($base);
+}

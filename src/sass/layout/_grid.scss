@@ -1,0 +1,162 @@
+$_grid-breakpoint: ("sm": 0px, "md": 480px, "lg": 840px,);
+
+$_grid-column: ("sm": 4, "md": 8, "lg": 12,);
+
+$_grid-gutter: ("sm": 15px, "md": 15px, "lg": 15px,);
+
+$_grid-width: ("sm": 72px, "md": 72px, "lg": 72px,);
+
+$_column-up: map-get($_grid-column, nth(map-keys($_grid-column), length($_grid-column)));
+
+@mixin _breakpoint($key) {
+  $value: $key;
+
+  @if (map-has-key($_grid-breakpoint, $key)) {
+    $value: map-get($_grid-breakpoint, $key);
+  }
+
+  @if (type-of($value) != "number") or (type-of($value) == "number" and unitless($value)) {
+    @error "Breakpoint `$value` type error!";
+  }
+
+  $query: ("min-width": p-unit-convert($value, $p-unit-global));
+
+  @media #{inspect($query)} {
+    @content;
+  }
+}
+
+:root {
+  @include p-unit-rem("--grid--gutter", map-get($_grid-gutter, "sm"));
+  @include p-unit-rem("--grid--width", map-get($_grid-width, "sm"));
+
+  @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+    @include p-unit-rem("--grid--#{$key}-gutter", map-get($_grid-gutter, $key));
+    @include p-unit-rem("--grid--#{$key}-width", map-get($_grid-width, $key));
+  }
+}
+
+.grid {
+  box-sizing: border-box;
+  @include p-unit-rem("max-width", (map-get($_grid-width, "sm") * map-get($_grid-column, "sm")) + (map-get($_grid-gutter, "sm") * (map-get($_grid-column, "sm") + 1)));
+  max-width: calc(var(--grid--width, #{p-unit-convert(map-get($_grid-width, "sm"), $p-unit-global)}) * #{map-get($_grid-column, "sm")} + var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)}) * #{(map-get($_grid-column, "sm") + 1)});
+  @include p-unit-rem("padding", map-get($_grid-gutter, "sm"));
+  padding: var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)});
+  margin: 0 auto;
+
+  @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+    @include _breakpoint($key) {
+      @include p-unit-rem("max-width", (map-get($_grid-width, $key) * map-get($_grid-column, $key)) + (map-get($_grid-gutter, $key) * (map-get($_grid-column, $key) + 1)));
+      max-width: calc(var(--grid--#{$key}-width, #{p-unit-convert(map-get($_grid-width, $key), $p-unit-global)}) * #{map-get($_grid-column, $key)} + var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)}) * #{(map-get($_grid-column, $key) + 1)});
+      @include p-unit-rem("padding", map-get($_grid-gutter, $key));
+      padding: var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)});
+    }
+  }
+}
+
+.grid--fluid {
+  max-width: none;
+}
+
+.grid__inner {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: stretch;
+  @include p-unit-rem("margin", map-get($_grid-gutter, "sm") / -2);
+  margin: calc(var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)}) / -2);
+
+  @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+    @include _breakpoint($key) {
+      @include p-unit-rem("margin", map-get($_grid-gutter, $key) / -2);
+      margin: calc(var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)}) / -2);
+    }
+  }
+}
+
+.grid__cell {
+  box-sizing: border-box;
+  width: calc(#{min(percentage(map-get($_grid-column, "sm") / map-get($_grid-column, "sm")), 100%)} - #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)});
+  width: calc(#{min(percentage(map-get($_grid-column, "sm") / map-get($_grid-column, "sm")), 100%)} - var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)}));
+  @include p-unit-rem("margin", map-get($_grid-gutter, "sm") / 2);
+  margin: calc(var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)}) / 2);
+
+  @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+    @include _breakpoint($key) {
+      width: calc(#{min(percentage(map-get($_grid-column, "sm") / map-get($_grid-column, $key)), 100%)} - #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)});
+      width: calc(#{min(percentage(map-get($_grid-column, "sm") / map-get($_grid-column, $key)), 100%)} - var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)}));
+      @include p-unit-rem("margin", map-get($_grid-gutter, $key) / 2);
+      margin: calc(var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)}) / 2);
+    }
+  }
+}
+
+@for $i from 1 through $_column-up {
+  .grid__cell--#{$i},
+  .grid__cell--sm-#{$i} {
+    width: calc(#{min(percentage($i / map-get($_grid-column, "sm")), 100%)} - #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)});
+    width: calc(#{min(percentage($i / map-get($_grid-column, "sm")), 100%)} - var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)}));
+  }
+}
+
+@each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+  @include _breakpoint($key) {
+    @for $j from 1 through $_column-up {
+      .grid__cell--#{$j},
+      .grid__cell--#{$key}-#{$j} {
+        width: calc(#{min(percentage($j / map-get($_grid-column, $key)), 100%)} - #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)});
+        width: calc(#{min(percentage($j / map-get($_grid-column, $key)), 100%)} - var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)}));
+      }
+    }
+  }
+}
+
+@supports (display: grid) {
+  .grid__inner {
+    display: grid;
+    margin: 0;
+    @include p-unit-rem("grid-gap", map-get($_grid-gutter, "sm"));
+    grid-gap: var(--grid--gutter, #{p-unit-convert(map-get($_grid-gutter, "sm"), $p-unit-global)});
+    grid-template-columns: repeat(#{map-get($_grid-column, "sm")}, minmax(0, 1fr));
+
+    @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+      @include _breakpoint($key) {
+        @include p-unit-rem("grid-gap", map-get($_grid-gutter, $key));
+        grid-gap: var(--grid--#{$key}-gutter, #{p-unit-convert(map-get($_grid-gutter, $key), $p-unit-global)});
+        grid-template-columns: repeat(#{map-get($_grid-column, $key)}, minmax(0, 1fr));
+      }
+    }
+  }
+
+  .grid__cell,
+  [class^="grid__cell--"] {
+    width: auto;
+    margin: 0;
+  }
+
+  .grid__cell {
+    grid-column-end: span min(map-get($_grid-column, "sm"), map-get($_grid-column, "sm"));
+    @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+      @include _breakpoint($key) {
+        grid-column-end: span min(map-get($_grid-column, "sm"), map-get($_grid-column, $key));
+      }
+    }
+  }
+
+  @for $k from 1 through $_column-up {
+    .grid__cell--#{$k},
+    .grid__cell--sm-#{$k} {
+      grid-column-end: span min($k, map-get($_grid-column, "sm"));
+    }
+  }
+
+  @each $key in map-keys(map-remove($_grid-breakpoint, "sm")) {
+    @include _breakpoint($key) {
+      @for $l from 1 through $_column-up {
+        .grid__cell--#{$l},
+        .grid__cell--#{$key}-#{$l} {
+          grid-column-end: span min($l, map-get($_grid-column, $key));
+        }
+      }
+    }
+  }
+}

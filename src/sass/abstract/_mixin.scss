@@ -1,0 +1,14 @@
+@mixin l-host($z-index: "component") {
+  @if (not map-has-key($z, $z-index)) {
+    @error "Unknown #{$z-index}'s elevation!";
+  }
+
+  :host {
+    position: relative;
+    z-index: map-get($z, $z-index);
+    display: block;
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+  }
+}

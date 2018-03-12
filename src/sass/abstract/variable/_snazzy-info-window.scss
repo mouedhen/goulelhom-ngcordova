@@ -1,0 +1,26 @@
+// Content
+$si-content-bg: $card-bg; // Background color of the infowindow
+// $si-content-padding: $card-spacer-y $card-spacer-x; // Padding of the infowindow
+$si-content-padding: 0; // Padding of the infowindow
+$si-font-size: $font-size-base; // Font size of the infowindow content
+
+// Border
+$si-border-width: $card-border-width; // Width of the border
+$si-border-color: $card-border-color; // Color of the border
+$si-border-radius: $card-border-radius; // Border radius of the infowindow
+
+// Pointer
+$si-pointer-length: 15px; // Length of the pointer, from the edge of the infowindow to the tip
+
+// Shadow
+$si-shadow-h: 0; // Shadow horizontal offset
+$si-shadow-v: 1px; // Shadow vertical offset
+$si-shadow-blur: 3px; // Shadow blur radius
+$si-shadow-spread: 0; // Shadow spread radius
+$si-shadow-color: #000; // Shadow color
+$si-shadow-opacity: 0.298039; // Shadow opacity
+
+// Close button
+$si-close-font-size: 24px; // Size of the close button text
+$si-close-opacity: 0.5; // Initial opacity of the close button
+$si-close-hover-opacity: 0.7; // Hover and focus opacity of the close button

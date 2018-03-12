@@ -1,0 +1,37 @@
+.flex-embed {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+
+  &::after {
+    display: block;
+    content: "";
+  }
+}
+
+@each $key, $value in ("3by1": (1 / 3), "21by9": (9 / 21), "2by1": (1 / 2), "16by9": (9 / 16), "4by3": (3 / 4), "1by1": (1)) {
+  .flex-embed--#{$key}::after {
+    padding-bottom: percentage($value);
+  }
+}
+
+.flex-embed__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  & iframe,
+  & embed,
+  & object,
+  & video,
+  & img {
+    display: block;
+    width: inherit;
+    height: inherit;
+    object-fit: cover;
+    border: 0;
+  }
+}

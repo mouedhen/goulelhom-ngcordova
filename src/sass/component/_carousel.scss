@@ -1,0 +1,26 @@
+carousel {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel.slide,
+.carousel-inner,
+.carousel-item.item,
+.carousel-item.item .item,
+.carousel-item.item img {
+  width: inherit;
+  height: inherit;
+}
+
+.carousel-item.item img {
+  object-fit: cover;
+}
+
+.carousel-caption {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  @include p-unit-rem("padding-top", (($font-size-base * $line-height-base) * 2));
+  padding-bottom: calc(6vh + #{p-unit-convert(($font-size-base * $line-height-base) * 3.5, $p-unit-global)});
+  background-image: radial-gradient(ellipse farthest-corner at center bottom, #000 0%, rgba(#000, 0) 100%);
+}

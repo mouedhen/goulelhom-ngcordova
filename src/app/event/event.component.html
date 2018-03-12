@@ -1,0 +1,34 @@
+<div class="grid grid--fluid">
+  <div class="grid__inner">
+    <div class="grid__cell grid__cell--12">
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-4">
+            {{ event.name_en | titlecase }}
+          </h1>
+          <p class="lead mb-0 text-muted">
+            <svg class="icon icon--calendar icon--m">
+              <use xlink:href="/assets/icon/symbol-defs.svg#icon-calendar"></use>
+            </svg>
+            <span>
+              {{ event.start_date | date: 'MMMM d, yyyy' }}
+            </span>
+          </p>
+          <p class="lead text-muted">
+            <svg class="icon icon--calendar icon--m">
+              <use xlink:href="/assets/icon/symbol-defs.svg#icon-calendar"></use>
+            </svg>
+            <span>
+              {{ event.end_date | date: 'MMMM d, yyyy' }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="grid__cell grid__cell--12">
+      <p>
+        {{ event.description_en }}
+      </p>
+    </div>
+  </div>
+</div>

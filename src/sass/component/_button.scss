@@ -1,0 +1,17 @@
+.btn--floating {
+  position: fixed;
+  z-index: map-get($z, "floating");
+  right: 6%;
+  bottom: 6vh;
+  padding: 0;
+  @include p-unit-rem("width", (($font-size-base * $line-height-base) * 2.5));
+  @include p-unit-rem("height", (($font-size-base * $line-height-base) * 2.5));
+  @include p-unit-rem("line-height", (($font-size-base * $line-height-base) * 2.5));
+  @include p-unit-rem("border-radius", (($font-size-base * $line-height-base) * 2.5) / 2);
+}
+
+.btn--floating--centered {
+  right: 0;
+  left: 0;
+  margin: auto;
+}

@@ -1,0 +1,149 @@
+<agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" (mapClick)="onChooseLocation($event)">|
+  <agm-marker *ngFor="let complaint of complaints" [latitude]="+complaint.latitude" [longitude]="+complaint.longitude">
+    <agm-snazzy-info-window [closeWhenOthersOpen]="true">
+      <ng-template>
+        <div [class]="complaint.cover === null ? '' : 'bg-dark text-white'">
+          <div *ngIf="complaint.cover !== null">
+            <img [src]="'https://dashboard.goulelhom.org' + complaint.cover.url" alt="" class="card-img">
+          </div>
+          <div [class]="complaint.cover === null ? 'card-body' : 'card-img-overlay'">
+            <h5 class="card-title">
+              {{ complaint.subject }}
+            </h5>
+            <p class="card-text mb-2">
+              <svg class="icon icon--map icon--m">
+                <use xlink:href="/assets/icon/symbol-defs.svg#icon-map"></use>
+              </svg>
+              {{ complaint.municipality.name_en }}
+            </p>
+            <p class="card-text">
+              {{ complaint.description }}
+            </p>
+          </div>
+        </div>
+      </ng-template>
+    </agm-snazzy-info-window>
+  </agm-marker>
+</agm-map>
+
+<button type="button" class="btn btn-primary btn--floating" (click)="openModal1(template1)">
+  <svg class="icon icon--bullhorn">
+    <use xlink:href="/assets/icon/symbol-defs.svg#icon-bullhorn"></use>
+  </svg>
+</button>
+
+<ng-template #template1>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      File a claim
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modalRef1.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="complaintFormGroup1" (ngSubmit)="addPost(complaintFormGroup1.value)">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="complaintNameInput">Name</label>
+        <input formControlName="complaintName" name="complaintName" type="text" id="complaintNameInput"
+               [class]="!complaintFormGroup1.controls['complaintName'].valid && complaintFormGroup1.controls['complaintName'].touched ? 'form-control is-invalid': 'form-control'">
+        <div
+          *ngIf="!complaintFormGroup1.controls['complaintName'].valid && complaintFormGroup1.controls['complaintName'].touched"
+          class="invalid-feedback">
+          Please enter your name.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="complaintPhoneInput">Phone number</label>
+        <input formControlName="complaintPhoneNumber" name="complaintPhoneNumber" type="tel" class="form-control"
+               id="complaintPhoneInput" aria-describedby="complaintPhoneNumberHelpBlock"
+               [class]="!complaintFormGroup1.controls['complaintPhoneNumber'].valid && complaintFormGroup1.controls['complaintPhoneNumber'].touched ? 'form-control is-invalid' : 'form-control'">
+        <div
+          *ngIf="!complaintFormGroup1.controls['complaintPhoneNumber'].valid && complaintFormGroup1.controls['complaintPhoneNumber'].touched; else complaintPhoneNumberElseBlock"
+          class="invalid-feedback">
+          Please enter valid phone number (+216 01 123 581) or (01 123 581).
+        </div>
+        <ng-template #complaintPhoneNumberElseBlock>
+          <div id="complaintPhoneNumberHelpBlock" class="form-text text-muted">
+            Valid phone number format (+216 01 123 581) or (01 123 581).
+          </div>
+        </ng-template>
+      </div>
+      <div class="form-group">
+        <label for="complaintMunicipalitySelect">Municipality</label>
+        <select formControlName="complaintMunicipality" name="complaintMunicipality"
+                id="complaintMunicipalitySelect"
+                [class]="!complaintFormGroup1.controls['complaintMunicipality'].valid && complaintFormGroup1.controls['complaintMunicipality'].touched ? 'form-control is-invalid' : 'form-control'">
+          <option *ngFor="let municipality of municipalities" [value]="municipality.id">
+            {{ municipality.name_en }}
+          </option>
+        </select>
+        <div
+          *ngIf="!complaintFormGroup1.controls['complaintMunicipality'].valid && complaintFormGroup1.controls['complaintMunicipality'].touched"
+          class="invalid-feedback">
+          Please choose from the list of municipalities above.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="complaintThemeSelect">Subject</label>
+        <select formControlName="complaintSubject" name="complaintSubject" id="complaintThemeSelect"
+                [class]="!complaintFormGroup1.controls['complaintSubject'].valid && complaintFormGroup1.controls['complaintSubject'].touched ? 'form-control is-invalid' : 'form-control'">
+          <option *ngFor="let theme of themes" [value]="theme.id">
+            {{ theme.name_en }}
+          </option>
+        </select>
+        <div
+          *ngIf="!complaintFormGroup1.controls['complaintSubject'].valid && complaintFormGroup1.controls['complaintSubject'].touched"
+          class="invalid-feedback">
+          Please choose from the list of topics above.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="complaintDescriptionTextarea">Description</label>
+        <textarea formControlName="complaintDescription" name="complaintDescription" style="resize: none"
+                  id="complaintDescriptionTextarea" rows="3"
+                  [class]="!complaintFormGroup1.controls['complaintDescription'].valid && complaintFormGroup1.controls['complaintDescription'].touched ? 'form-control is-invalid' : 'form-control'"></textarea>
+        <div
+          *ngIf="!complaintFormGroup1.controls['complaintDescription'].valid && complaintFormGroup1.controls['complaintDescription'].touched; else complaintDescriptionElseBlock"
+          class="invalid-feedback">
+          Please enter a minimum of 80 characters claim's description.
+        </div>
+        <ng-template #complaintDescriptionElseBlock>
+          <div id="complaintDescriptionHelpBlock" class="form-text text-muted">
+            Minimum of 80 characters.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modalRef1.hide()">
+        <svg class="icon icon--bullhorn icon--m">
+          <use xlink:href="/assets/icon/symbol-defs.svg#icon-cancel-circle"></use>
+        </svg>
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="!complaintFormGroup1.valid" (click)="modalRef1.hide()">
+        <svg class="icon icon--bullhorn icon--m">
+          <use xlink:href="/assets/icon/symbol-defs.svg#icon-next"></use>
+        </svg>
+        Next step
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Auto shown modal</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <dropzone [config]="config" [message]="'Click or drag images here to upload'" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></dropzone>
+      </div>
+    </div>
+  </div>
+</div>
